@@ -3,7 +3,7 @@ KunVTK
 CMake is needed!!!!!
 
 
-mkdir build
-cd build
-cmake ..
-make
+mkdir build  
+cd build  
+cmake ..  
+make  
