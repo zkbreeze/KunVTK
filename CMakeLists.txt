@@ -49,5 +49,9 @@ file(GLOB_RECURSE ReadUnstructuredGridFile "${EXAMPLES}/IO/ReadUnstructuredGrid/
 add_executable(ReadUnstructuredGrid ${ReadUnstructuredGridFile})
 target_link_libraries(ReadUnstructuredGrid ${VTK_LIBRARIES} vtkRenderingVolume vtkIOXML)
 
+# file(GLOB_RECURSE StructuredPointsToUnstructuredGridFile "${EXAMPLES}/IO/StructuredPointsToUnstructuredGrid/*.cxx")
+# add_executable(StructuredPointsToUnstructuredGrid ${StructuredPointsToUnstructuredGridFile})
+# target_link_libraries(StructuredPointsToUnstructuredGrid ${VTK_LIBRARIES} vtkRenderingVolume vtkIOXML)
+
 # install(TARGETS util 
 # 		ARCHIVE DESTINATION ${PROJECT_SOURCE_DIR}/lib)
