@@ -11,7 +11,12 @@
 
 #include <kvs/StructuredVolumeImporter>
 #include <kvs/StructuredVolumeObject> 
-#include <vtkStructuredPoints.h>
+#include <vtkImageData.h>
+#include <vtkStructuredGrid.h>
+#include <vtkPoints.h>
+#include <vtkFloatArray.h>
+#include <vtkDataArray.h>
+#include <vtkPointData.h>
 
 namespace kun
 {
@@ -25,7 +30,8 @@ public:
 	KVSMLStructuredVolumeReader( std::string filename );
 
 	void Read( std::string filename );
-	vtkStructuredPoints* OutputVTKStructuredVolume();
+	vtkImageData* OutputVTKStructuredVolume();
+	vtkStructuredGrid* OutputVTKStructuredVolumeGrid();
 };
 
 
