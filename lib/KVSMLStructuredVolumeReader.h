@@ -27,6 +27,7 @@ class KVSMLStructuredVolumeReader
 	const kvs::StructuredVolumeObject* m_volume;
 
 public:
+	KVSMLStructuredVolumeReader(){}
 	KVSMLStructuredVolumeReader( std::string filename );
 
 	void Read( std::string filename );

@@ -52,7 +52,7 @@ vtkColorTransferFunction* KVSTransferFunctionReader::vtkColorMap()
 
 	for( size_t i = 0; i < 256; i++ )
 	{
-		float scale = i / ( m_max - m_min );
+		float scale = i * ( m_max - m_min ) / 255.0;
 
 		float location = m_min + scale;
 		float r = (float)kvs_cmap.at(scale).r() / 255.0;

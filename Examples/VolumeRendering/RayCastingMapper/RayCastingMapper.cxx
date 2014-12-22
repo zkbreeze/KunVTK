@@ -26,10 +26,23 @@
 #include "KVSTransferFunctionReader.h"
 #include <kvs/TransferFunction>
 #include <kvs/ColorMap>
+#include <vtkCamera.h>
+#include <vtkLight.h>
 
 int main( int argc, char** argv )
 {
     vtkRenderer* ren = vtkRenderer::New();
+    vtkCamera* camera = vtkCamera::New();
+    camera->SetPosition( 150, 150, 500 );
+    camera->SetFocalPoint( 150, 150, 0 );
+    camera->SetViewUp( 0, 1, 0 );
+    ren->SetActiveCamera( camera );
+
+    vtkLight* light = vtkLight::New();
+    light->SetPosition( 150, 150, 500 );
+    light->SetFocalPoint( 150, 150, 0 );
+    ren->AddLight( light );
+
     vtkRenderWindow* renWin = vtkRenderWindow::New();
     renWin->AddRenderer( ren );
 
@@ -71,11 +84,11 @@ int main( int argc, char** argv )
     vtkVolumeProperty* volumeProperty = vtkVolumeProperty::New();
     volumeProperty->SetColor(colorTransferFunction);
     volumeProperty->SetScalarOpacity(opacityTransferFunction);
-    // volumeProperty->ShadeOn();
-    // volumeProperty->SetDiffuse(0.2); 
+    volumeProperty->ShadeOn();
+    // volumeProperty->SetDiffuse(0.7); 
     // volumeProperty->SetAmbient(0.1); 
     // volumeProperty->SetSpecular(0.5); 
-    // volumeProperty->SetSpecularPower(10.0);
+    // volumeProperty->SetSpecularPower(70.0);
     volumeProperty->SetInterpolationTypeToLinear();
 
     // Ray casting mapper

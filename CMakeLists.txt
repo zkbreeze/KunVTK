@@ -53,5 +53,14 @@ target_link_libraries(ReadUnstructuredGrid ${VTK_LIBRARIES} vtkRenderingVolume v
 # add_executable(StructuredPointsToUnstructuredGrid ${StructuredPointsToUnstructuredGridFile})
 # target_link_libraries(StructuredPointsToUnstructuredGrid ${VTK_LIBRARIES} vtkRenderingVolume vtkIOXML)
 
+file(GLOB_RECURSE UnstructuredRayCastingFile "${EXAMPLES}/VolumeRendering/UnstructuredRayCasting/*.cpp")
+add_executable( UnstructuredRayCasting ${UnstructuredRayCastingFile} )
+target_link_libraries( UnstructuredRayCasting ${VTK_LIBRARIES} vtkRenderingVolume vtkIOLegacy vtkRenderingFreeType )
+
+file(GLOB_RECURSE IsosurfaceFile "${EXAMPLES}/Isosurface/StructuredVolume/*.cpp")
+add_executable( IsosurfaceFile ${IsosurfaceFile} )
+target_link_libraries( IsosurfaceFile ${VTK_LIBRARIES} util kvsCore vtkRenderingVolume vtkIOLegacy vtkRenderingFreeType vtkIOXML )
+
+
 # install(TARGETS util 
 # 		ARCHIVE DESTINATION ${PROJECT_SOURCE_DIR}/lib)
