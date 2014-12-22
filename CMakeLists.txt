@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8)
  
 PROJECT(KunVTK)
 
-set( KVS_DIR "/Users/breeze/local/kvs" )
+set(KVS_DIR $ENV{KVS_DIR})
 include_directories( ${KVS_DIR}/include )
 link_directories( ${KVS_DIR}/lib )
  
