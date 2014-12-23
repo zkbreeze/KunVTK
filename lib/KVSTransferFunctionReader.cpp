@@ -55,9 +55,9 @@ vtkColorTransferFunction* KVSTransferFunctionReader::vtkColorMap()
 		float scale = ( m_max - m_min ) / 255.0;
 
 		float location = m_min + i * scale;
-		float r = (float)kvs_cmap.at(scale).r() / 255.0;
-		float g = (float)kvs_cmap.at(scale).g() / 255.0;
-		float b = (float)kvs_cmap.at(scale).b() / 255.0;
+		float r = (float)kvs_cmap.at(location).r() / 255.0;
+		float g = (float)kvs_cmap.at(location).g() / 255.0;
+		float b = (float)kvs_cmap.at(location).b() / 255.0;
 		vtk_cmap->AddRGBPoint( location, r, g, b );
 	}
 
