@@ -52,9 +52,9 @@ vtkColorTransferFunction* KVSTransferFunctionReader::vtkColorMap()
 
 	for( size_t i = 0; i < 256; i++ )
 	{
-		float scale = i * ( m_max - m_min ) / 255.0;
+		float scale = ( m_max - m_min ) / 255.0;
 
-		float location = m_min + scale;
+		float location = m_min + i * scale;
 		float r = (float)kvs_cmap.at(scale).r() / 255.0;
 		float g = (float)kvs_cmap.at(scale).g() / 255.0;
 		float b = (float)kvs_cmap.at(scale).b() / 255.0;
@@ -74,7 +74,7 @@ vtkPiecewiseFunction* KVSTransferFunctionReader::vtkOpacityMap()
 		float scale = ( m_max - m_min ) / 255.0;
 
 		float location = m_min + i * scale;
-		float opacity = (float)kvs_omap.at(i);
+		float opacity = (float)kvs_omap.at(location);
 		vtk_omap->AddPoint( location, opacity );
 	}
 
