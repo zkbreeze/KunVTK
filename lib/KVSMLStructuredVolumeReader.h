@@ -31,6 +31,7 @@ public:
 	KVSMLStructuredVolumeReader( std::string filename );
 
 	void Read( std::string filename );
+	void SetKVSStructuredVolume( kvs::StructuredVolumeObject* object ){ m_volume = object; }
 	vtkImageData* OutputVTKStructuredVolume();
 	vtkStructuredGrid* OutputVTKStructuredVolumeGrid();
 };

@@ -28,15 +28,19 @@
 #include <kvs/ColorMap>
 #include <vtkCamera.h>
 #include <vtkLight.h>
+#include <vtkMatrix4x4.h>
+#include "KVSView.h"
 
 int main( int argc, char** argv )
 {
     vtkRenderer* ren = vtkRenderer::New();
-    vtkCamera* camera = vtkCamera::New();
-    camera->SetPosition( 150, 150, 500 );
-    camera->SetFocalPoint( 150, 150, 0 );
-    camera->SetViewUp( 0, 1, 0 );
-    ren->SetActiveCamera( camera );
+    // vtkCamera* camera = vtkCamera::New();
+    // camera->SetParallelScale( 2.0 );
+    // camera->SetPosition( 192, 174, 768 );
+    // camera->SetFocalPoint( 192, 174, 38.5 );
+    // camera->SetViewUp( 0, 1, 0 );
+    // camera->SetViewAngle( 45 );
+    // ren->SetActiveCamera( camera );
 
     vtkLight* light = vtkLight::New();
     light->SetPosition( 150, 150, 500 );
@@ -57,8 +61,8 @@ int main( int argc, char** argv )
     // reader->SetFileName( argv[1] );
     // reader->Update();
     kun::KVSMLStructuredVolumeReader* reader = new kun::KVSMLStructuredVolumeReader( argv[1] );
-    vtkImageData* points = reader->OutputVTKStructuredVolume();
-    // vtkStructuredGrid* points = reader->OutputVTKStructuredVolumeGrid();
+    vtkImageData* data = reader->OutputVTKStructuredVolume();
+    // vtkStructuredGrid* data = reader->OutputVTKStructuredVolumeGrid();
 
     // Transfer function: opacity map and color map
     // vtkPiecewiseFunction* opacityTransferFunction = vtkPiecewiseFunction::New();
@@ -76,7 +80,7 @@ int main( int argc, char** argv )
     // Set the transfer function with KVS transfer function
     kvs::TransferFunction t( 256 );
     kun::KVSTransferFunctionReader* tfunc = new kun::KVSTransferFunctionReader( t );
-    tfunc->SetRange( points->GetScalarRange() );
+    tfunc->SetRange( data->GetScalarRange() );
     vtkPiecewiseFunction* opacityTransferFunction = tfunc->vtkOpacityMap();
     vtkColorTransferFunction* colorTransferFunction = tfunc->vtkColorMap();
 
@@ -84,7 +88,7 @@ int main( int argc, char** argv )
     vtkVolumeProperty* volumeProperty = vtkVolumeProperty::New();
     volumeProperty->SetColor(colorTransferFunction);
     volumeProperty->SetScalarOpacity(opacityTransferFunction);
-    volumeProperty->ShadeOn();
+    // volumeProperty->ShadeOn();
     // volumeProperty->SetDiffuse(0.7); 
     // volumeProperty->SetAmbient(0.1); 
     // volumeProperty->SetSpecular(0.5); 
@@ -95,17 +99,30 @@ int main( int argc, char** argv )
     // vtkVolumeRayCastCompositeFunction* compositeFunction = vtkVolumeRayCastCompositeFunction::New();
     vtkGPUVolumeRayCastMapper* volumeMapper = vtkGPUVolumeRayCastMapper::New();
     // volumeMapper->SetVolumeRayCastFunction(compositeFunction);
-    volumeMapper->SetInputData( points );
+    volumeMapper->SetInputData( data );
 
     // Set the volume
     vtkVolume* volume = vtkVolume::New();
     volume->SetMapper(volumeMapper);
     volume->SetProperty(volumeProperty);
+    // volume->SetPosition( 150, 150, 0 );
+    // volume->RotateX( 100 );
+    // volume->RotateY( 100 );
+    // volume->RotateZ( 100 );
+    // volume->SetScale( 5.0 );
 
     ren->AddVolume( volume );
     ren->SetBackground( 1, 1, 1);
-    renWin->SetSize(600, 600);
+    renWin->SetSize( 512,  512);
     renWin->Render();
+
+    kun::KVSView* view = new kun::KVSView( 1.2 );
+    view->SetVolume( data );
+    ren->SetActiveCamera( view->ToVTKCamera() );
+    vtkMatrix4x4* matrix = ren->GetActiveCamera()->GetViewTransformMatrix();
+    matrix->Print( std::cout );
+
+
     iren->Start();
 
     return EXIT_SUCCESS;
