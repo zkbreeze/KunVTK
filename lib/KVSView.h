@@ -5,7 +5,7 @@
 //  Created by Kun Zhao on 2014-12-23 21:56:46.
 //
 //
-//  Still only can be used for the kvs::Camera's xform 2014-12-23 22:00:59
+//  Volume's gravity center must be set as the origin of the world coordinates system
 
 #ifndef KUN__KVSVIEW_H_INCLUDE
 #define KUN__KVSVIEW_H_INCLUDE

@@ -30,6 +30,27 @@
 #include <vtkLight.h>
 #include <vtkMatrix4x4.h>
 #include "KVSView.h"
+#include <kvs/Timer>
+#include <vtkCommand.h>
+
+namespace
+{
+    kvs::Timer rendering_time;         
+}
+
+// Callback for the interaction
+class FPS : public vtkCommand
+{
+public:
+  static FPS *New()
+    { return new FPS; }
+  virtual void Execute(vtkObject *caller, unsigned long, void*)
+    {
+        rendering_time.stop();
+        std::cout << "FPS: " << rendering_time.fps() << std::endl;
+        rendering_time.start();
+    }
+};
 
 int main( int argc, char** argv )
 {
@@ -101,28 +122,34 @@ int main( int argc, char** argv )
     // volumeMapper->SetVolumeRayCastFunction(compositeFunction);
     volumeMapper->SetInputData( data );
 
-    // Set the volume
+
+
     vtkVolume* volume = vtkVolume::New();
     volume->SetMapper(volumeMapper);
     volume->SetProperty(volumeProperty);
-    // volume->SetPosition( 150, 150, 0 );
+
+    int* dims = data->GetDimensions();
+    volume->SetPosition( -dims[0] * 0.5, -dims[1] * 0.5, -dims[2] * 0.5 );
     // volume->RotateX( 100 );
     // volume->RotateY( 100 );
     // volume->RotateZ( 100 );
-    // volume->SetScale( 5.0 );
+    vtkMatrix4x4* matrixVolume = volume->GetMatrix();
+    matrixVolume->Print( std::cout );
 
     ren->AddVolume( volume );
     ren->SetBackground( 1, 1, 1);
     renWin->SetSize( 512,  512);
-    renWin->Render();
-
-    kun::KVSView* view = new kun::KVSView( 1.2 );
+    // Set the volume
+    kun::KVSView* view = new kun::KVSView( 1.0 );
     view->SetVolume( data );
     ren->SetActiveCamera( view->ToVTKCamera() );
     vtkMatrix4x4* matrix = ren->GetActiveCamera()->GetViewTransformMatrix();
     matrix->Print( std::cout );
 
-
+    FPS* fps = FPS::New();
+    ren->AddObserver( vtkCommand::StartEvent, fps);
+    rendering_time.start();
+    renWin->Render();
     iren->Start();
 
     return EXIT_SUCCESS;

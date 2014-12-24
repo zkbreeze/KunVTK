@@ -17,10 +17,14 @@ vtkCamera* KVSView::ToVTKCamera()
 {
 	vtkCamera* camera = vtkCamera::New();
 	int* dims = m_volume->GetDimensions();
-	camera->SetPosition( dims[0] / 2.0, dims[1] / 2.0, dims[0] * 2.0 * m_scale );
-	camera->SetFocalPoint( dims[0] / 2.0, dims[1] / 2.0, dims[2] / 2.0 );
+	int max_dim = 0;
+	if( dims[1] > dims[0] ) max_dim = 1;
+
+	camera->SetPosition( 0.0, 0.0, dims[max_dim] * 2.0 * m_scale );
+	camera->SetFocalPoint( 0.0, 0.0, 0.0 );
 	camera->SetViewUp( 0, 1, 0 );
 	camera->SetViewAngle( 45 );
+	camera->SetClippingRange( 0.001, dims[max_dim] * 2.0 * m_scale + 1000);
 
 	return camera;
 }
